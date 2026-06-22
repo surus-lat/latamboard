@@ -33,7 +33,7 @@ function renderMarkdownLinks(text: string) {
   return { __html: html }
 }
 
-const HF_BASE = 'https://huggingface.co/datasets/mauroibz/leaderboard-results/resolve/main'
+const HF_BASE = 'https://huggingface.co/datasets/LatamBoard/leaderboard-results/resolve/main'
 
 async function fetchJson<T>(path: string): Promise<T> {
   // Try HuggingFace first (always fresh), fall back to bundled /public file
