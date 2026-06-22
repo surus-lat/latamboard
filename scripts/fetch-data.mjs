@@ -11,7 +11,7 @@ import { writeFile, mkdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 
-const BASE_URL = process.env.LEADERBOARD_DATA_URL || 'https://huggingface.co/datasets/mauroibz/leaderboard-results/resolve/main'
+const BASE_URL = process.env.LEADERBOARD_DATA_URL || 'https://huggingface.co/datasets/LatamBoard/leaderboard-results/resolve/main'
 const DEFAULT_FILES = 'leaderboard_table.json,tasks_groups.json,tasks_list.json'
 const FILES = (process.env.LEADERBOARD_DATA_FILES || DEFAULT_FILES)
   .split(',')
