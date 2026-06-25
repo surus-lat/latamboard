@@ -70,7 +70,7 @@ export function Landing() {
     if (!data || data.length === 0) {
       return { orderedColumns: [] as string[], aggregates: new Set<string>(), groupColumnMap: {} as Record<string, string[]>, groupOrder: [] as string[] }
     }
-    const present = new Set(Object.keys(data[0]))
+    const present = new Set<string>(data.flatMap(r => Object.keys(r)))
     const aggregatesArr = ['overall_latam_score', 'spanish_score', 'portuguese_score']
     const aggregatesSet = new Set(aggregatesArr)
 
