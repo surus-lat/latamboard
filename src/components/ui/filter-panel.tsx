@@ -22,8 +22,16 @@ export function FilterPanel({
     return 'badge-default'
   }
 
+  const groupConfig: Record<string, { prefix: string; name: string; aggCol?: string }> = {
+    latam_es: { prefix: 'spanish_', name: 'Spanish', aggCol: 'spanish_score' },
+    latam_pr: { prefix: 'portuguese_', name: 'Portuguese', aggCol: 'portuguese_score' },
+    translation: { prefix: 'translation_', name: 'Translation', aggCol: 'translation_score' },
+    structured_extraction: { prefix: 'structured_extraction_', name: 'Structured Extraction', aggCol: 'structured_extraction_score' },
+    transcription: { prefix: 'transcription_', name: 'Transcription' },
+  }
+
   const cleanColumnName = (column: string) => {
-    return column.replace(/^spanish_|^portuguese_/, '')
+    return column.replace(/^spanish_|^portuguese_|^translation_|^structured_extraction_|^transcription_/, '')
   }
 
   return (
@@ -57,33 +65,30 @@ export function FilterPanel({
           </div>
         </div>
 
-        {/* Language Groups */}
+        {/* Per-group sections */}
         {groupOrder.map((groupKey) => {
-          const prefixMap: Record<string, string> = { 
-            latam_es: 'spanish_', 
-            latam_pr: 'portuguese_' 
-          }
-          const prefix = prefixMap[groupKey]
-          if (!prefix) return null
+          const cfg = groupConfig[groupKey]
+          if (!cfg) return null
 
-          const groupName = groupKey === 'latam_es' ? 'Spanish' : 'Portuguese'
-          const aggCol = `${prefix.slice(0, -1)}_score`
           const subtasks = groupColumnMap[groupKey] ?? []
+          if (subtasks.length === 0 && !cfg.aggCol) return null
 
           return (
             <div key={groupKey} className="space-y-2 md:space-y-3">
-              <h4 className="text-xs md:text-sm font-medium text-muted-foreground">{groupName} {t('filters.benchmarks')}</h4>
+              <h4 className="text-xs md:text-sm font-medium text-muted-foreground">{cfg.name} {t('filters.benchmarks')}</h4>
               <div className="flex flex-wrap gap-1.5 md:gap-2">
                 {/* Aggregate score */}
-                <button
-                  onClick={() => onToggleColumn(aggCol)}
-                  className={`badge text-xs transition-all ${getBadgeStyle(visibleColumns.includes(aggCol))}`}
-                >
-                  {visibleColumns.includes(aggCol) && (
-                    <X className="h-3 w-3 mr-1" />
-                  )}
-                  {cleanColumnName(aggCol)}
-                </button>
+                {cfg.aggCol && (
+                  <button
+                    onClick={() => onToggleColumn(cfg.aggCol!)}
+                    className={`badge text-xs transition-all ${getBadgeStyle(visibleColumns.includes(cfg.aggCol))}`}
+                  >
+                    {visibleColumns.includes(cfg.aggCol) && (
+                      <X className="h-3 w-3 mr-1" />
+                    )}
+                    {cleanColumnName(cfg.aggCol)}
+                  </button>
+                )}
 
                 {/* Subtasks */}
                 {subtasks.map((column) => (
